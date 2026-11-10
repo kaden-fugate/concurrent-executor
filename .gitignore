@@ -16,10 +16,6 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
 *.lai
 *.la
@@ -30,3 +26,21 @@
 *.exe
 *.out
 *.app
+basic_thread_pool
+thread_pool_tests
+
+# MacOS bs
+.DS_Store
+
+# Cmake garbage
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeFiles/
+build/
+
+# Use Cmake to make your makefile
+Makefile
+
+# Other garbage
+.vscode/
