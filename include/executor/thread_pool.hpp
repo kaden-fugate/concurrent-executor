@@ -4,9 +4,13 @@
 #include <cstddef>
 #include <condition_variable>
 #include <functional>
+#include <future>
+#include <memory>
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 namespace executor {
@@ -24,6 +28,10 @@ public:
 
     // execute will add a worker to the queue. a worker thread will execute it later on.
     void execute(std::function<void()>);
+
+    template <typename Function, typename... Args>
+    auto submit(Function&&, Args&&...) 
+        -> std::future<std::invoke_result_t<Function, Args...>>;
 
     // stop accepting further work, allow current workers to finish up.
     // you can call this multiple times externally.
@@ -45,6 +53,32 @@ private:
     // only one caller can perform the join sequence
     std::mutex _shutdown_mutex;
 };
+
+template <typename Function, typename... Args>
+auto ThreadPool::submit(Function&& fn, Args&&... args) 
+    -> std::future<std::invoke_result_t<Function, Args...>>
+{
+    using Result = std::invoke_result_t<Function, Args...>;
+
+    // convert function to a no-argument callable (only format that execute accepts)
+    auto bound_function = std::bind_front(
+        std::forward<Function>(fn),
+        std::forward<Args>(args)...
+    );
+
+    // wrap the bound function, connect it to a future, return as a shared pointer
+    auto pkg_task = make_shared<std::packaged_task<Result()>>(
+        std::move(bound_function)
+    );
+
+    std::future<Result> res = pkg_task->get_future();
+
+    this->execute([pkg_task] {
+        (*pkg_task)();
+    });
+
+    return res;
+}
 
 };
 

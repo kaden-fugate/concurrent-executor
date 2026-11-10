@@ -23,11 +23,13 @@
 *.lib
 
 # Executables
-*.exe
-*.out
-*.app
-basic_thread_pool
-thread_pool_tests
+#   Example execs
+basic_thread_pool_execute
+basic_thread_pool_submit
+
+#   Test execs
+thread_pool_tests_execute
+thread_pool_tests_submit
 
 # MacOS bs
 .DS_Store

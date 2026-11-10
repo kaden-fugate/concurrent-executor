@@ -24,17 +24,27 @@ target_compile_options(executor PRIVATE
     -Wpedantic
 )
 
-add_executable(basic_thread_pool
-    examples/basic_thread_pool.cpp
+add_executable(basic_thread_pool_execute
+    examples/basic_thread_pool_execute.cpp
 )
 
-target_link_libraries(basic_thread_pool PRIVATE executor)
-
-add_executable(thread_pool_tests
-    tests/thread_pool_tests.cpp
+add_executable(basic_thread_pool_submit
+    examples/basic_thread_pool_submit.cpp
 )
 
-target_link_libraries(thread_pool_tests PRIVATE executor)
+target_link_libraries(basic_thread_pool_execute PRIVATE executor)
+target_link_libraries(basic_thread_pool_submit PRIVATE executor)
+
+add_executable(thread_pool_tests_execute
+    tests/thread_pool_tests_execute.cpp
+)
+
+add_executable(thread_pool_tests_submit
+    tests/thread_pool_tests_submit.cpp
+)
+
+target_link_libraries(thread_pool_tests_execute PRIVATE executor)
+target_link_libraries(thread_pool_tests_submit PRIVATE executor)
 
 enable_testing()
 add_test(NAME thread_pool_tests COMMAND thread_pool_tests)

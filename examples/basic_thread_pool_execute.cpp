@@ -25,4 +25,6 @@ int main() {
 
     std::cout << "Shutting down the thread pool.\n";
     pool.shutdown();
+
+    return 0;
 }
