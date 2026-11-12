@@ -20,11 +20,11 @@ public:
     explicit ThreadPool(std::size_t);
     ~ThreadPool();
 
-    ThreadPool(const ThreadPool &) = delete;
-    ThreadPool(ThreadPool &&)     = delete;
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool(ThreadPool&&)      = delete;
 
-    ThreadPool& operator=(const ThreadPool &)  = delete;
-    ThreadPool& operator=(const ThreadPool &&) = delete;
+    ThreadPool& operator=(const ThreadPool&)  = delete;
+    ThreadPool& operator=(const ThreadPool&&) = delete;
 
     // execute will add a worker to the queue. a worker thread will execute it later on.
     void execute(std::function<void()>);

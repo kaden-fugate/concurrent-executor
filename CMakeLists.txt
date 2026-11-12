@@ -11,6 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(executor
     src/thread_pool.cpp
+    src/task_group.cpp
 )
 
 target_include_directories(executor
@@ -32,8 +33,13 @@ add_executable(basic_thread_pool_submit
     examples/basic_thread_pool_submit.cpp
 )
 
+add_executable(basic_task_group
+    examples/basic_task_group.cpp
+)
+
 target_link_libraries(basic_thread_pool_execute PRIVATE executor)
 target_link_libraries(basic_thread_pool_submit PRIVATE executor)
+target_link_libraries(basic_task_group PRIVATE executor)
 
 add_executable(thread_pool_tests_execute
     tests/thread_pool_tests_execute.cpp

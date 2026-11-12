@@ -26,6 +26,7 @@
 #   Example execs
 basic_thread_pool_execute
 basic_thread_pool_submit
+basic_task_group
 
 #   Test execs
 thread_pool_tests_execute

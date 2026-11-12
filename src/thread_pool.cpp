@@ -83,11 +83,8 @@ void ThreadPool::worker_loop() {
         try {
             task();
         }
-        catch (const std::exception &ex) {
-            std::cerr << "Task threw: " << ex.what() << "\n";
-        }
         catch (...) {
-            std::cerr << "Task threw a non-standard exception.\n";
+            throw;
         }
     }
 }
