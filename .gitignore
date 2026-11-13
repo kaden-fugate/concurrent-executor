@@ -31,6 +31,7 @@ basic_task_group
 #   Test execs
 thread_pool_tests_execute
 thread_pool_tests_submit
+concurrency_stress_tests
 
 # MacOS bs
 .DS_Store
@@ -40,7 +41,7 @@ CMakeCache.txt
 cmake_install.cmake
 CTestTestfile.cmake
 CMakeFiles/
-build/
+build*/
 
 # Use Cmake to make your makefile
 Makefile
