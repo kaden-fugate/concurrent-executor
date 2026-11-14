@@ -1,6 +1,8 @@
 #ifndef THREAD_POOL_H
 #define THREAD_POOL_H
 
+#include "executor/detail/scheduler.hpp"
+
 #include <cstddef>
 #include <condition_variable>
 #include <functional>
@@ -15,6 +17,8 @@
 
 namespace executor {
 
+using Task = std::function<void()>;
+
 class ThreadPool {
 public: 
     explicit ThreadPool(std::size_t);
@@ -24,10 +28,10 @@ public:
     ThreadPool(ThreadPool&&)      = delete;
 
     ThreadPool& operator=(const ThreadPool&)  = delete;
-    ThreadPool& operator=(const ThreadPool&&) = delete;
+    ThreadPool& operator=(ThreadPool&&)       = delete;
 
     // execute will add a worker to the queue. a worker thread will execute it later on.
-    void execute(std::function<void()>);
+    void execute(Task);
 
     template <typename Function, typename... Args>
     auto submit(Function&&, Args&&...) 
@@ -43,12 +47,7 @@ private:
     void worker_loop();
 
     std::vector<std::thread> _workers;
-    std::queue<std::function<void()>> _tasks;
-
-    // protect _tasks and _accepting_tasks
-    std::mutex _queue_mutex;
-    std::condition_variable _task_available;
-    bool _accepting_tasks{true};
+    std::unique_ptr<detail::Scheduler> _scheduler;
 
     // only one caller can perform the join sequence
     std::mutex _shutdown_mutex;
@@ -67,7 +66,7 @@ auto ThreadPool::submit(Function&& fn, Args&&... args)
     );
 
     // wrap the bound function, connect it to a future, return as a shared pointer
-    auto pkg_task = make_shared<std::packaged_task<Result()>>(
+    auto pkg_task = std::make_shared<std::packaged_task<Result()>>(
         std::move(bound_function)
     );
 
@@ -80,6 +79,6 @@ auto ThreadPool::submit(Function&& fn, Args&&... args)
     return res;
 }
 
-};
+}
 
 #endif

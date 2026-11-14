@@ -25,8 +25,8 @@ public:
     TaskGroup(const TaskGroup&) = delete;
     TaskGroup(TaskGroup&&)      = delete;
     
-    TaskGroup& operator=(const TaskGroup&)  = delete;
-    TaskGroup& operator=(const TaskGroup&&) = delete;
+    TaskGroup& operator=(const TaskGroup&) = delete;
+    TaskGroup& operator=(TaskGroup&&)      = delete;
 
     template <typename Function, typename... Args>
     auto submit(Function&&, Args&&...) 
