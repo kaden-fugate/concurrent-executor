@@ -9,9 +9,12 @@
 
 namespace executor::detail {
 
+using size_t = std::size_t;
+
 class SharedQueueScheduler : public Scheduler {
 public:
-    void enqueue(Task)                     override;
+    void enqueue_global(Task)              override;
+    void enqueue_local(size_t, Task)       override;
     bool wait_and_take(Task&, std::size_t) override;
     void close()                           override;
 

@@ -79,9 +79,14 @@ add_executable(concurrency_stress_tests
     tests/concurrency_stress_tests.cpp
 )
 
+add_executable(recursive_work_stealing_benchmark
+    tests/recursive_work_stealing_benchmark.cpp
+)
+
 target_link_libraries(thread_pool_tests_execute PRIVATE executor)
 target_link_libraries(thread_pool_tests_submit PRIVATE executor)
 target_link_libraries(concurrency_stress_tests PRIVATE executor)
+target_link_libraries(recursive_work_stealing_benchmark PRIVATE executor)
 
 enable_executor_sanitizers(executor)
 
@@ -107,6 +112,11 @@ add_test(
 add_test(
     NAME concurrency_stress_tests
     COMMAND concurrency_stress_tests
+)
+
+add_test(
+    NAME recursive_work_stealing_benchmark
+    COMMAND recursive_work_stealing_benchmark
 )
 
 set_tests_properties(concurrency_stress_tests PROPERTIES

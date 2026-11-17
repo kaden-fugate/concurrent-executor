@@ -5,7 +5,7 @@
 
 namespace executor::detail {
 
-void SharedQueueScheduler::enqueue(Task task) {
+void SharedQueueScheduler::enqueue_global(Task task) {
     if (!task)
         throw std::invalid_argument("Cannot execute an empty task");
     
@@ -18,6 +18,10 @@ void SharedQueueScheduler::enqueue(Task task) {
     }
 
     _task_available.notify_one();
+}
+
+void SharedQueueScheduler::enqueue_local(size_t, Task task) {
+    enqueue_global(task);
 }
 
 bool SharedQueueScheduler::wait_and_take(Task &task, std::size_t) {

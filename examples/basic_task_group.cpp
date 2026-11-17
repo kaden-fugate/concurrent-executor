@@ -1,12 +1,13 @@
 #include "executor/task_group.hpp"
 #include "executor/thread_pool.hpp"
+#include "executor/scheduler_type.hpp"
 
 #include <iostream>
 #include <stdint.h>
 #include <chrono>
 
 #define N_THREADS 8
-#define N_TASKS   40
+#define N_TASKS   100
 
 uint64_t sq_sums(int start, int count) { 
     uint64_t sum = 0;

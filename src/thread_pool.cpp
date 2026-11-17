@@ -3,9 +3,9 @@
 #include "executor/detail/work_stealing_scheduler.hpp"
 
 #include <exception>
+#include <iostream>
 #include <stdexcept>
 #include <utility>
-#include <iostream>
 
 namespace {
 
@@ -46,7 +46,10 @@ ThreadPool::~ThreadPool() {
 
 // execute will add a worker to the queue. a worker thread will execute it later on.
 void ThreadPool::execute(Task task) {
-    this->_scheduler->enqueue(std::move(task));
+    if (context._pool == this)
+        this->_scheduler->enqueue_local(context._worker_id, std::move(task));
+    else
+        this->_scheduler->enqueue_global(std::move(task));
 }
 
 void ThreadPool::shutdown() {
