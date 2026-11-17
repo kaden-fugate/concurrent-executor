@@ -20,7 +20,7 @@ void SharedQueueScheduler::enqueue(Task task) {
     _task_available.notify_one();
 }
 
-bool SharedQueueScheduler::wait_and_take(Task &task) {
+bool SharedQueueScheduler::wait_and_take(Task &task, std::size_t) {
     std::unique_lock<std::mutex> lock(_mutex);
 
     _task_available.wait(lock, [this] {

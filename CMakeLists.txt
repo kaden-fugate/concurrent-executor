@@ -37,6 +37,7 @@ add_library(executor
     src/thread_pool.cpp
     src/task_group.cpp
     src/shared_queue_scheduler.cpp
+    src/work_stealing_scheduler.cpp
 )
 
 target_include_directories(executor

@@ -4,13 +4,17 @@
 #include <stdexcept>
 #include <string>
 
-#define N_THREADS 2
+#define N_THREADS 8
 
 int add(int x, int y) { return x + y; }
 
 int main() {
     executor::ThreadPool pool(N_THREADS);
 
+    auto res = pool.submit([&pool] {
+        return pool.submit(add, 2, 3);
+    });
+    std::cout << "Result: " << res.get().get() << ".\n";
     // test that submit can receive multiple types of functions with different arguments
     auto answer = pool.submit([] {
         return 22;

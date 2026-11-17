@@ -1,6 +1,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
+#include <cstddef>
 #include <functional>
 
 namespace executor::detail {
@@ -17,7 +18,7 @@ public:
     // wait until work is avail or shutdown is complete
     //     true:  when work is obtained and assigned
     //     false: when closed and fully drained
-    virtual bool wait_and_take(Task&) = 0;
+    virtual bool wait_and_take(Task&, std::size_t) = 0;
 
     // reject submissions but make sure that queued work can drain
     virtual void close() = 0;

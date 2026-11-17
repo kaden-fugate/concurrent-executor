@@ -11,9 +11,9 @@ namespace executor::detail {
 
 class SharedQueueScheduler : public Scheduler {
 public:
-    void enqueue(Task)        override;
-    bool wait_and_take(Task&) override;
-    void close()              override;
+    void enqueue(Task)                     override;
+    bool wait_and_take(Task&, std::size_t) override;
+    void close()                           override;
 
 private:
     std::queue<Task> _tasks;

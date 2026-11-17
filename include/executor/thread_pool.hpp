@@ -1,6 +1,7 @@
 #ifndef THREAD_POOL_H
 #define THREAD_POOL_H
 
+#include "executor/scheduler_type.hpp"
 #include "executor/detail/scheduler.hpp"
 
 #include <cstddef>
@@ -15,6 +16,8 @@
 #include <utility>
 #include <vector>
 
+#include <iostream>
+
 namespace executor {
 
 using Task = std::function<void()>;
@@ -22,6 +25,7 @@ using Task = std::function<void()>;
 class ThreadPool {
 public: 
     explicit ThreadPool(std::size_t);
+    explicit ThreadPool(std::size_t, SchedulerType);
     ~ThreadPool();
 
     ThreadPool(const ThreadPool&) = delete;
@@ -44,13 +48,16 @@ public:
     [[nodiscard]] std::size_t worker_count() const noexcept;
 
 private:
-    void worker_loop();
 
-    std::vector<std::thread> _workers;
-    std::unique_ptr<detail::Scheduler> _scheduler;
+    void worker_loop(std::size_t);
+    std::unique_ptr<detail::Scheduler> make_scheduler(std::size_t, SchedulerType);
+
+    std::vector<std::thread> _workers;              // threads
+    std::unique_ptr<detail::Scheduler> _scheduler;  // scheduler used for dispatch
 
     // only one caller can perform the join sequence
     std::mutex _shutdown_mutex;
+
 };
 
 template <typename Function, typename... Args>
